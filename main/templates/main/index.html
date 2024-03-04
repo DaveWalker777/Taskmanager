@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+<style>
+    .btn-text-right{
+    text-align: right;
+    }
+</style>
+{% block content %}
+    <h1>Главная страница</h1>
+    <p>Список задач</p>
+    {% if tasks %}
+    {% for elem in tasks %}
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a href="{% url 'update' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right">Update </a>
+        <a href="{% url 'delete-event' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right">Delete</a>
+    </div>
+</div>
+<div class="alert alert-warning mt-2">
+            <h3>{{ elem.title }}</h3>
+            <p>{{ elem.task }}</p>
+            <p style="color:#FF0000">Deadline:</p>
+               {{ elem.date }}
+               {{ elem.time }}
+        </div>
+    {% endfor %}
+    {% else %}
+        <p>Нет записей!</p>
+    {% endif %}
+{% endblock %}
+
+
