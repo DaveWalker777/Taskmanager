@@ -10,23 +10,51 @@
     }
 </style>
 {% block content %}
-    <h1>Главная страница</h1>
-    <p>Список задач</p>
-    {% if tasks %}
-    {% for elem in tasks %}
+    <h1 style="color:red">Главная страница</h1>
+    <p  style="color:red">Список тем</p>
+    {% if themes %}
+    {% for elem in themes %}
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{% url 'update' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right">Update </a>
-        <a href="{% url 'delete-event' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right">Delete</a>
+        <a href="{% url 'create' elem.id %}" class=" btn btn-outline-warning btn-sm pull-right">Add </a>
+        <a href="{% url 'delete_theme' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right">Delete </a>
     </div>
 </div>
-<div class="alert alert-warning mt-2">
-            <h3>{{ elem.title }}</h3>
-            <p>{{ elem.task }}</p>
-            <p style="color:#FF0000">Deadline:</p>
-               {{ elem.date }}
-               {{ elem.time }}
-        </div>
+<div class="alert alert-warning mt-2" style="background-color: white">
+    <h3>{{ elem.title }}</h3>
+
+    {% if elem.tasks.all %}
+<div class="tasks-container" style="background-color: #f0f0f0; padding: 10px;">
+    <ul style="list-style-type: none; padding: 0;">
+        {% for task in elem.tasks.all %}
+            <li style="margin-bottom: 5px; border: 1px solid black; padding: 5px; position: relative;">
+                <span style="display: block;"><h3>{{ task.title }}</h3></span>
+                <span style="display: block;">{{ task.task }}</span>
+                <span style="display: block; color:red">{{ task.date }}  {{ task.time }}</span>
+
+                <!-- Кнопки Update и Delete -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="position: absolute; top: 1px; right: 1px;">
+                    <a href="{% url 'update' task.id %}" class="btn btn-outline-success btn-sm">Update</a>
+                    <a href="{% url 'delete-event' task.id %}" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</a>
+                </div>
+            </li>
+
+            {% if not forloop.last %}
+                <li style="margin-bottom: 20px;"></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+
+
+    {% else %}
+        <p>No tasks for this theme.</p>
+    {% endif %}
+</div>
+
     {% endfor %}
     {% else %}
         <p>Нет записей!</p>

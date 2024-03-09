@@ -2,7 +2,15 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
+class Theme(models.Model):
+    title = models.CharField('Тема', max_length=50)
+
+    def __str__(self):
+        return self.title
+
+
 class Task(models.Model):
+    theme = models.ForeignKey(Theme, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField('Название', max_length=50)
     task = models.TextField('Описание')
     date = models.DateField('Дата')

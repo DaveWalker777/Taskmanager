@@ -2,18 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Task
-from .forms import TaskForm, CreateUserForm
+from .models import Task, Theme
+from .forms import TaskForm, CreateUserForm, ThemeForm
 from .decorators import *
 
 
 def index(request):
     query = request.GET.get('q', '')
     if query:
-        tasks = Task.objects.filter(title__icontains=query) | Task.objects.filter(task__icontains=query)
+        themes = Theme.objects.filter(title__icontains=query)
     else:
-        tasks = Task.objects.order_by('id')[::-1]
-    return render(request, 'main/index.html', {'title': 'Главная страница сайта', 'tasks': tasks, 'query': query})
+        themes = Theme.objects.order_by('id')[::-1]
+    return render(request, 'main/index.html', {'title': 'Главная страница сайта', 'themes': themes, 'query': query})
 
 
 @login_required(login_url="login")
@@ -62,15 +62,19 @@ def register_user(request):
 
 @login_required(login_url="login")
 @allowed_users(allowed_roles=['admin', 'editor'])
-def create(request):
+def create(request, theme_id):
     error = ''
+    theme = Theme.objects.get(pk=theme_id)
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
+            form = form.save(commit=False)
+            form.theme = theme
             form.save()
             return redirect('home')
         else:
-            error = 'Форма содержит ошибки'
+            return render(request, 'main/create.html', {'form': form,
+                                                        'theme': theme})
     form = TaskForm()
     context = {
         'form': form,
@@ -81,9 +85,36 @@ def create(request):
 
 @login_required(login_url="login")
 @allowed_users(allowed_roles=['admin', 'editor'])
+def add_theme(request):
+    error = ''
+    if request.method == 'POST':
+        theme_form = ThemeForm(request.POST)
+        if theme_form.is_valid():
+            theme_form.save()
+            return redirect('home')
+        else:
+            return render(request, 'main/add_theme.html', {'theme_form': theme_form})
+    theme_form = ThemeForm()
+    context = {
+        'theme_form': theme_form,
+        'error': error
+    }
+    return render(request, 'main/add_theme.html', context)
+
+
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['admin', 'editor'])
 def delete_event(request, task_id):
     task = Task.objects.get(pk=task_id)
     task.delete()
+    return redirect('home')
+
+
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['admin', 'editor'])
+def delete_theme(request, theme_id):
+    theme = Theme.objects.get(pk=theme_id)
+    theme.delete()
     return redirect('home')
 
 

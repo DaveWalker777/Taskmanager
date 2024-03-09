@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'main/base.html' %}
+
+{% block title %}
+Создание темы
+{% endblock %}
+
+{% block content %}
+    <h1 style="color:red">Добавить тему</h1>
+    <form method="post">
+    {% csrf_token %}
+    {{ theme_form.title }}<br>
+        <button type="submit" class="btn btn-success"> Добавить </button>
+  </form>
+{% endblock %}

@@ -1,4 +1,4 @@
-from .models import Task
+from .models import Task, Theme
 from django.forms import ModelForm, TextInput, Textarea, TimeInput, DateInput
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -28,6 +28,12 @@ class TaskForm(ModelForm):
             })
 
         }
+
+
+class ThemeForm(forms.ModelForm):
+    class Meta:
+        model = Theme
+        fields = ['title']
 
 
 class CreateUserForm(UserCreationForm):

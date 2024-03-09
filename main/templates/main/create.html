@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Создать задачу</h1>
+    <h1 style="color:red">Создать задачу</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.title }}<br>
@@ -13,6 +13,10 @@
         {{ form.date }}<br>
         {{ form.time }}<br>
         <button type="submit" class="btn btn-success"> Добавить </button>
-        <span>{{ error }}</span>
+<!--        <span>{{ error }}</span>-->
     </form>
+{{ form.title.errors }}
+{{ form.task.errors }}
+{{ form.date.errors }}
+{{ form.time.errors }}
 {% endblock %}
