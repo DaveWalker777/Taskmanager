@@ -5,6 +5,15 @@ from django.contrib.auth.decorators import login_required
 from .models import Task, Theme
 from .forms import TaskForm, CreateUserForm, ThemeForm
 from .decorators import *
+from rest_framework import generics
+from .serializers import ThemeSerializer, TaskSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 def index(request):
@@ -129,5 +138,23 @@ def update(request, task_id):
     return render(request, 'main/update.html', {'task': task,
                                                 'form': form})
 
+
+class ThemeView(generics.ListCreateAPIView):
+    queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+        return context
+
+
+class TaskView(generics.ListCreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
 

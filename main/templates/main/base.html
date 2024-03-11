@@ -40,6 +40,9 @@
 
           <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'add_theme' %}">Добавить тему</a>
           <span class="hello-msg"> Hello, {{request.user}} | </span>
+          {% if user.is_authenticated and user.is_staff %}
+          <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'admin:index' %}">Админка</a>
+          {% endif %}
           <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'logout' %}">Logout</a>
           {% else %}
           <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'register_user' %}">Register</a>
