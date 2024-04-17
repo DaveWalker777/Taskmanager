@@ -11,18 +11,29 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django.views.decorators.csrf import csrf_exempt
 
 
 
+from django.db.models import Q
+
 def index(request):
     query = request.GET.get('q', '')
     if query:
-        themes = Theme.objects.filter(title__icontains=query)
+        themes = Theme.objects.filter(
+            Q(title__icontains=query) |  #
+            Q(tasks__title__icontains=query) |
+            Q(tasks__task__icontains=query) |
+            Q(tasks__date__icontains=query) |
+            Q(tasks__time__icontains=query)
+        ).distinct()
+        themes = themes.distinct()
     else:
-        themes = Theme.objects.order_by('id')[::-1]
+        themes = Theme.objects.order_by('-id')
+
     return render(request, 'main/index.html', {'title': 'Главная страница сайта', 'themes': themes, 'query': query})
+
 
 
 @login_required(login_url="login")
@@ -142,8 +153,8 @@ def update(request, task_id):
 class ThemeView(generics.ListCreateAPIView):
     queryset = Theme.objects.all()
     serializer_class = ThemeSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    #authentication_classes = [TokenAuthentication]
+   # permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

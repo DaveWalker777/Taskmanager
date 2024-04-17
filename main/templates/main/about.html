@@ -1,9 +1,10 @@
-{% extends 'main/base.html' %}
 
+{% extends 'main/base.html' %}
+{% load static %}
 {% block title %}
 О сайте
 {% endblock %}
-
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
 {% block content %}
     <h1 style=" background-color: white">Планировщик задач</h1>
     <p style=" background-color: white">Планировщик задач - это инструмент, который помогает организовать и структурировать рабочий день, позволяя

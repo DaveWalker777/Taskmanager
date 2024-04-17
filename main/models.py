@@ -1,4 +1,3 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -7,6 +6,10 @@ class Theme(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = 'Тема'
+        verbose_name_plural = 'Темы'
 
 
 class Task(models.Model):
