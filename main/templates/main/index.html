@@ -16,8 +16,13 @@
     {% for elem in themes %}
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{% url 'create' elem.id %}" class=" btn btn-outline-warning btn-sm pull-right">Add </a>
-        <a href="{% url 'delete_theme' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right">Delete </a>
+        {% if user.is_authenticated %}
+        {% if not elem.tasks.all %}
+        <a href="{% url 'add_task' elem.id %}" class=" btn btn-outline-warning btn-sm pull-right">Add task</a>
+        {% endif %}
+        <a href="{% url 'update_theme' elem.id %}" class=" btn btn-outline-success btn-sm pull-right">Update </a>
+        <a href="{% url 'delete_theme' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right ">Delete </a>
+        {% endif %}
     </div>
 </div>
 <div class="alert alert-warning mt-2" style="background-color: white">
@@ -34,8 +39,10 @@
 
                 <!-- Кнопки Update и Delete -->
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="position: absolute; top: 1px; right: 1px;">
-                    <a href="{% url 'update' task.id %}" class="btn btn-outline-success btn-sm">Update</a>
-                    <a href="{% url 'delete-event' task.id %}" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'update_task' task.id %}" class="btn btn-outline-success btn-sm">Update</a>
+                    <a href="{% url 'delete_task' task.id %}" class="btn btn-outline-danger btn-sm" style="margin-left: 5px;">Delete</a>
+                    {% endif %}
                 </div>
             </li>
 
@@ -45,11 +52,6 @@
         {% endfor %}
     </ul>
 </div>
-
-
-
-
-
     {% else %}
         <p>No tasks for this theme.</p>
     {% endif %}

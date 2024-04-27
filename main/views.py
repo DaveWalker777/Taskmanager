@@ -82,7 +82,7 @@ def register_user(request):
 
 @login_required(login_url="login")
 @allowed_users(allowed_roles=['admin', 'editor'])
-def create(request, theme_id):
+def add_task(request, theme_id):
     error = ''
     theme = Theme.objects.get(pk=theme_id)
     if request.method == "POST":
@@ -93,14 +93,14 @@ def create(request, theme_id):
             form.save()
             return redirect('home')
         else:
-            return render(request, 'main/create.html', {'form': form,
+            return render(request, 'main/add_task.html', {'form': form,
                                                         'theme': theme})
     form = TaskForm()
     context = {
         'form': form,
         'error': error
     }
-    return render(request, 'main/create.html', context)
+    return render(request, 'main/add_task.html', context)
 
 
 @login_required(login_url="login")
@@ -124,7 +124,7 @@ def add_theme(request):
 
 @login_required(login_url="login")
 @allowed_users(allowed_roles=['admin', 'editor'])
-def delete_event(request, task_id):
+def delete_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     task.delete()
     return redirect('home')
@@ -140,13 +140,25 @@ def delete_theme(request, theme_id):
 
 @login_required(login_url="login")
 @allowed_users(allowed_roles=['admin', 'editor'])
-def update(request, task_id):
+def update_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     form = TaskForm(request.POST or None, instance=task)
     if form.is_valid():
         form.save()
         return redirect('home')
-    return render(request, 'main/update.html', {'task': task,
+    return render(request, 'main/update_task.html', {'task': task,
+                                                'form': form})
+
+
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['admin', 'editor'])
+def update_theme(request, theme_id):
+    theme = Theme.objects.get(pk=theme_id)
+    form = ThemeForm(request.POST or None, instance=theme)
+    if form.is_valid():
+        form.save()
+        return redirect('home')
+    return render(request, 'main/update_theme.html', {'theme': theme,
                                                 'form': form})
 
 
@@ -154,7 +166,7 @@ class ThemeView(generics.ListCreateAPIView):
     queryset = Theme.objects.all()
     serializer_class = ThemeSerializer
     #authentication_classes = [TokenAuthentication]
-   # permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
