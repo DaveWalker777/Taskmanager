@@ -8,7 +8,7 @@ services:
 
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: #
+      POSTGRES_PASSWORD: 159
       POSTGRES_DB: django_pet
     ports:
       - "5432:5432"
@@ -17,7 +17,7 @@ services:
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: davewalker777@yandex.ru
-      PGADMIN_DEFAULT_PASSWORD: #
+      PGADMIN_DEFAULT_PASSWORD: 159
     ports:
       - "5050:80"
     depends_on:
@@ -26,7 +26,7 @@ services:
   web:
     build: .
     command: >
-      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py runserver 0.0.0.0:8000"
     volumes:
       - C:/Users/mrsch/PycharmProjects/somedjango/taskmanager:/code
     ports:

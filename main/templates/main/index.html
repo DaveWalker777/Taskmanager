@@ -17,9 +17,7 @@
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         {% if user.is_authenticated %}
-        {% if not elem.tasks.all %}
         <a href="{% url 'add_task' elem.id %}" class=" btn btn-outline-warning btn-sm pull-right">Add task</a>
-        {% endif %}
         <a href="{% url 'update_theme' elem.id %}" class=" btn btn-outline-success btn-sm pull-right">Update </a>
         <a href="{% url 'delete_theme' elem.id %}" class=" btn btn-outline-danger btn-sm pull-right ">Delete </a>
         {% endif %}
