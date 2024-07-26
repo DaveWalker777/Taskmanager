@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import ThemeView, TaskView
+from .views import ThemeView, TaskView, ThemeDetailView
 from rest_framework.authtoken.views import obtain_auth_token
 
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path('update_theme/<theme_id>', views.update_theme, name='update_theme'),
     path('delete_theme/<theme_id>', views.delete_theme, name='delete_theme'),
     path('api/themes/', ThemeView.as_view(), name='theme-list-create'),
+    path('api/themes/<int:pk>/', ThemeDetailView.as_view(), name='theme-detail'),
     path('api/tasks/', TaskView.as_view(), name='task-list-create'),
     #path('api/get-token/', obtain_auth_token, name='get-token'),
 ]

@@ -174,6 +174,11 @@ class ThemeView(generics.ListCreateAPIView):
         return context
 
 
+class ThemeDetailView(generics.RetrieveAPIView):
+    queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer
+
+
 class TaskView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
