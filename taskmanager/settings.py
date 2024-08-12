@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = ['www.davewalker.ru', 'davewalker.ru', '95.164.113.115']
 
 # Application definition
 INSTALLED_APPS = [
