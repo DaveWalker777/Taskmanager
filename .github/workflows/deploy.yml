@@ -24,7 +24,7 @@ jobs:
 
     - name: Restart application on server
       run: |
-        ssh -o StrictHostKeyChecking=no username@server << 'EOF'
+        ssh -o StrictHostKeyChecking=no root@95.164.113.115 << 'EOF'
           cd /home/dave/taskmanager/
           docker-compose down
           docker-compose pull
