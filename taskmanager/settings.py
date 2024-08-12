@@ -13,6 +13,8 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['www.davewalker.ru', 'davewalker.ru', '95.164.113.115']
 
+CSRF_TRUSTED_ORIGINS = ['http://www.davewalker.ru', 'https://www.davewalker.ru']
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
