@@ -3,25 +3,32 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master
+      - mastaer
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.taskmanager }}
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.taskmanager }}
 
-      - name: Deploy
-        run: |
-          ssh -o StrictHostKeyChecking=no root@95.164.113.115 << 'EOF'
-            cd /home/dave/taskmanager
-            git pull origin main
-            docker-compose down
-            docker-compose up -d --build
-          EOF
+    - name: Copy project to server
+      run: |
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ username@server:/home/dave/taskmanager/
+
+    - name: Restart application on server
+      run: |
+        ssh -o StrictHostKeyChecking=no username@server << 'EOF'
+          cd /home/dave/taskmanager/
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d
+        EOF
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.taskmanager }}
